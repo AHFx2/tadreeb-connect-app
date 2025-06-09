@@ -26,74 +26,74 @@ const CoachDashboard: React.FC = () => {
         return <AttendanceTracker onBack={() => setActiveTab('overview')} />;
       default:
         return (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0">
-                <CardContent className="p-6">
+                <CardContent className="p-3 sm:p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-blue-100">إجمالي الطلاب</p>
-                      <p className="text-3xl font-bold">{mockStats.totalStudents}</p>
+                      <p className="text-blue-100 text-xs sm:text-sm">إجمالي الطلاب</p>
+                      <p className="text-xl sm:text-3xl font-bold">{mockStats.totalStudents}</p>
                     </div>
-                    <Users className="h-8 w-8 text-blue-200" />
+                    <Users className="h-6 w-6 sm:h-8 sm:w-8 text-blue-200" />
                   </div>
                 </CardContent>
               </Card>
 
               <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white border-0">
-                <CardContent className="p-6">
+                <CardContent className="p-3 sm:p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-green-100">حصص اليوم</p>
-                      <p className="text-3xl font-bold">{mockStats.todaysSessions}</p>
+                      <p className="text-green-100 text-xs sm:text-sm">حصص اليوم</p>
+                      <p className="text-xl sm:text-3xl font-bold">{mockStats.todaysSessions}</p>
                     </div>
-                    <Calendar className="h-8 w-8 text-green-200" />
+                    <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-green-200" />
                   </div>
                 </CardContent>
               </Card>
 
               <Card className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white border-0">
-                <CardContent className="p-6">
+                <CardContent className="p-3 sm:p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-emerald-100">الحضور اليوم</p>
-                      <p className="text-3xl font-bold">{mockStats.presentToday}</p>
+                      <p className="text-emerald-100 text-xs sm:text-sm">الحضور اليوم</p>
+                      <p className="text-xl sm:text-3xl font-bold">{mockStats.presentToday}</p>
                     </div>
-                    <CheckSquare className="h-8 w-8 text-emerald-200" />
+                    <CheckSquare className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-200" />
                   </div>
                 </CardContent>
               </Card>
 
               <Card className="bg-gradient-to-r from-orange-500 to-red-500 text-white border-0">
-                <CardContent className="p-6">
+                <CardContent className="p-3 sm:p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-orange-100">الغياب اليوم</p>
-                      <p className="text-3xl font-bold">{mockStats.absentToday}</p>
+                      <p className="text-orange-100 text-xs sm:text-sm">الغياب اليوم</p>
+                      <p className="text-xl sm:text-3xl font-bold">{mockStats.absentToday}</p>
                     </div>
-                    <CheckSquare className="h-8 w-8 text-orange-200" />
+                    <CheckSquare className="h-6 w-6 sm:h-8 sm:w-8 text-orange-200" />
                   </div>
                 </CardContent>
               </Card>
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse">
-                    <Plus className="h-5 w-5 text-blue-500" />
+                <CardHeader className="pb-3 sm:pb-6">
+                  <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse text-base sm:text-lg">
+                    <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />
                     <span>تسجيل طالب جديد</span>
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-sm">
                     إضافة طالب جديد وتحديد جدول التدريبات الخاص به
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-0">
                   <Button 
                     onClick={() => setActiveTab('register')}
-                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-sm sm:text-base py-2 sm:py-3"
                   >
                     تسجيل طالب جديد
                   </Button>
@@ -101,19 +101,19 @@ const CoachDashboard: React.FC = () => {
               </Card>
 
               <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse">
-                    <CheckSquare className="h-5 w-5 text-green-500" />
+                <CardHeader className="pb-3 sm:pb-6">
+                  <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse text-base sm:text-lg">
+                    <CheckSquare className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
                     <span>تسجيل الحضور والغياب</span>
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-sm">
                     متابعة حضور الطلاب وتسجيل حالات الغياب
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-0">
                   <Button 
                     onClick={() => setActiveTab('attendance')}
-                    className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
+                    className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-sm sm:text-base py-2 sm:py-3"
                   >
                     تسجيل الحضور
                   </Button>
@@ -123,9 +123,9 @@ const CoachDashboard: React.FC = () => {
 
             {/* Today's Schedule */}
             <Card>
-              <CardHeader>
-                <CardTitle>جدول اليوم</CardTitle>
-                <CardDescription>الحصص المجدولة لليوم الحالي</CardDescription>
+              <CardHeader className="pb-3 sm:pb-6">
+                <CardTitle className="text-base sm:text-lg">جدول اليوم</CardTitle>
+                <CardDescription className="text-sm">الحصص المجدولة لليوم الحالي</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
@@ -135,20 +135,21 @@ const CoachDashboard: React.FC = () => {
                     { time: '10:00 - 11:00', student: 'محمد خالد', level: 'متوسط', status: 'absent' },
                     { time: '11:00 - 12:00', student: 'فاطمة أحمد', level: 'متقدم', status: 'pending' },
                   ].map((session, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                        <div className="text-sm">
-                          <p className="font-medium">{session.student}</p>
-                          <p className="text-gray-500">{session.time}</p>
+                    <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-gray-50 rounded-lg space-y-2 sm:space-y-0">
+                      <div className="flex items-center space-x-3 rtl:space-x-reverse min-w-0">
+                        <div className="text-sm min-w-0 flex-1">
+                          <p className="font-medium truncate">{session.student}</p>
+                          <p className="text-gray-500 text-xs sm:text-sm">{session.time}</p>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                        <Badge variant="outline">{session.level}</Badge>
+                      <div className="flex items-center justify-between sm:justify-end space-x-2 rtl:space-x-reverse">
+                        <Badge variant="outline" className="text-xs">{session.level}</Badge>
                         <Badge 
                           variant={
                             session.status === 'present' ? 'default' : 
                             session.status === 'absent' ? 'destructive' : 'secondary'
                           }
+                          className="text-xs"
                         >
                           {session.status === 'present' ? 'حاضر' : 
                            session.status === 'absent' ? 'غائب' : 'في الانتظار'}

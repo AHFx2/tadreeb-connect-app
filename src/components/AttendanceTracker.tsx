@@ -3,197 +3,214 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { ArrowRight, CheckSquare, X, Search, Clock } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+import { ArrowRight, CheckSquare, Calendar, User } from 'lucide-react';
 
 interface AttendanceTrackerProps {
   onBack: () => void;
 }
 
 const AttendanceTracker: React.FC<AttendanceTrackerProps> = ({ onBack }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [attendanceRecords, setAttendanceRecords] = useState<Record<string, 'present' | 'absent' | 'visitor' | null>>({});
-
-  // Mock students for today
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  
+  // Mock students data for today's sessions
   const mockStudents = [
-    { id: '1', name: 'أحمد محمد', time: '08:00 - 09:00', level: 'متقدم', parentPhone: '0501234567', isScheduled: true },
-    { id: '2', name: 'سارة علي', time: '09:00 - 10:00', level: 'مبتدئ', parentPhone: '0501234568', isScheduled: true },
-    { id: '3', name: 'محمد خالد', time: '10:00 - 11:00', level: 'متوسط', parentPhone: '0501234569', isScheduled: true },
-    { id: '4', name: 'فاطمة أحمد', time: '11:00 - 12:00', level: 'متقدم', parentPhone: '0501234570', isScheduled: true },
-    { id: '5', name: 'عبدالله يوسف', time: '12:00 - 13:00', level: 'مبتدئ', parentPhone: '0501234571', isScheduled: true },
-    { id: '6', name: 'نور سالم', time: 'غير مجدول', level: 'متوسط', parentPhone: '0501234572', isScheduled: false },
+    {
+      id: '1',
+      name: 'أحمد محمد',
+      level: 'متقدم',
+      time: '08:00 - 09:00',
+      status: null,
+      parentPhone: '0501234567'
+    },
+    {
+      id: '2', 
+      name: 'سارة علي',
+      level: 'مبتدئ',
+      time: '09:00 - 10:00',
+      status: 'present',
+      parentPhone: '0507654321'
+    },
+    {
+      id: '3',
+      name: 'محمد خالد', 
+      level: 'متوسط',
+      time: '10:00 - 11:00',
+      status: 'absent',
+      parentPhone: '0509876543'
+    },
+    {
+      id: '4',
+      name: 'فاطمة أحمد',
+      level: 'متقدم', 
+      time: '11:00 - 12:00',
+      status: null,
+      parentPhone: '0502468135'
+    }
   ];
 
-  const filteredStudents = mockStudents.filter(student =>
-    student.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const [students, setStudents] = useState(mockStudents);
 
-  const markAttendance = (studentId: string, status: 'present' | 'absent' | 'visitor') => {
-    setAttendanceRecords(prev => ({
-      ...prev,
-      [studentId]: status
-    }));
-
-    const student = mockStudents.find(s => s.id === studentId);
-    const statusText = status === 'present' ? 'حاضر' : status === 'absent' ? 'غائب' : 'زائر';
-    
-    toast({
-      title: "تم تسجيل الحضور",
-      description: `تم تسجيل ${student?.name} كـ ${statusText}`,
-    });
+  const markAttendance = (studentId: string, status: 'present' | 'absent') => {
+    setStudents(prev => prev.map(student => 
+      student.id === studentId ? { ...student, status } : student
+    ));
   };
 
-  const getStatusColor = (status: string | null) => {
-    switch (status) {
-      case 'present': return 'default';
-      case 'absent': return 'destructive';
-      case 'visitor': return 'secondary';
-      default: return 'outline';
+  const getStatusBadge = (status: string | null) => {
+    if (status === 'present') {
+      return <Badge className="bg-green-100 text-green-800">حاضر ✅</Badge>;
+    } else if (status === 'absent') {
+      return <Badge className="bg-red-100 text-red-800">غائب ❌</Badge>;
+    } else {
+      return <Badge variant="outline">في الانتظار</Badge>;
     }
   };
 
-  const getStatusText = (status: string | null) => {
-    switch (status) {
-      case 'present': return 'حاضر ✅';
-      case 'absent': return 'غائب ❌';
-      case 'visitor': return 'زائر 👤';
-      default: return 'في الانتظار ⏳';
-    }
+  const todayStats = {
+    total: students.length,
+    present: students.filter(s => s.status === 'present').length,
+    absent: students.filter(s => s.status === 'absent').length,
+    pending: students.filter(s => s.status === null).length
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="flex items-center space-x-4 rtl:space-x-reverse mb-6">
-        <Button variant="outline" onClick={onBack} className="flex items-center space-x-2 rtl:space-x-reverse">
-          <ArrowRight className="h-4 w-4" />
-          <span>العودة</span>
-        </Button>
-        <h2 className="text-2xl font-bold">تسجيل الحضور والغياب</h2>
-      </div>
-
-      {/* Search and Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="md:col-span-2">
-          <div className="relative">
-            <Search className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="البحث عن طالب..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="text-right pr-10"
-            />
-          </div>
+    <div className="space-y-4 sm:space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <Button 
+            variant="outline" 
+            onClick={onBack}
+            className="flex items-center space-x-2 rtl:space-x-reverse text-sm"
+          >
+            <ArrowRight className="h-4 w-4" />
+            <span>العودة</span>
+          </Button>
         </div>
         
-        <Card className="bg-green-50 border-green-200">
-          <CardContent className="p-4 text-center">
-            <p className="text-sm text-green-600">الحضور</p>
-            <p className="text-2xl font-bold text-green-700">
-              {Object.values(attendanceRecords).filter(status => status === 'present').length}
-            </p>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 rtl:space-x-reverse">
+          <label className="text-sm font-medium">التاريخ:</label>
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+          />
+        </div>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <Card className="bg-blue-50">
+          <CardContent className="p-3 sm:p-4">
+            <div className="text-center">
+              <p className="text-lg sm:text-2xl font-bold text-blue-600">{todayStats.total}</p>
+              <p className="text-xs sm:text-sm text-blue-700">إجمالي الطلاب</p>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-red-50 border-red-200">
-          <CardContent className="p-4 text-center">
-            <p className="text-sm text-red-600">الغياب</p>
-            <p className="text-2xl font-bold text-red-700">
-              {Object.values(attendanceRecords).filter(status => status === 'absent').length}
-            </p>
+        <Card className="bg-green-50">
+          <CardContent className="p-3 sm:p-4">
+            <div className="text-center">
+              <p className="text-lg sm:text-2xl font-bold text-green-600">{todayStats.present}</p>
+              <p className="text-xs sm:text-sm text-green-700">حاضر</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-red-50">
+          <CardContent className="p-3 sm:p-4">
+            <div className="text-center">
+              <p className="text-lg sm:text-2xl font-bold text-red-600">{todayStats.absent}</p>
+              <p className="text-xs sm:text-sm text-red-700">غائب</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-orange-50">
+          <CardContent className="p-3 sm:p-4">
+            <div className="text-center">
+              <p className="text-lg sm:text-2xl font-bold text-orange-600">{todayStats.pending}</p>
+              <p className="text-xs sm:text-sm text-orange-700">في الانتظار</p>
+            </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Students List */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse">
-            <Clock className="h-5 w-5 text-blue-500" />
-            <span>طلاب اليوم</span>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse text-lg">
+            <CheckSquare className="h-5 w-5 text-blue-500" />
+            <span>تسجيل الحضور والغياب</span>
           </CardTitle>
-          <CardDescription>
-            انقر على الأزرار لتسجيل حضور أو غياب الطلاب
+          <CardDescription className="text-sm">
+            اضغط على الأزرار لتسجيل حضور أو غياب الطلاب
           </CardDescription>
         </CardHeader>
         
-        <CardContent>
-          <div className="space-y-4">
-            {filteredStudents.map((student) => {
-              const currentStatus = attendanceRecords[student.id];
-              
-              return (
-                <div 
-                  key={student.id} 
-                  className={`p-4 rounded-lg border transition-all ${
-                    !student.isScheduled ? 'bg-yellow-50 border-yellow-200' : 'bg-white border-gray-200'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 rtl:space-x-reverse mb-2">
-                        <h3 className="font-semibold text-lg">{student.name}</h3>
-                        {!student.isScheduled && (
-                          <Badge variant="outline" className="bg-yellow-100 text-yellow-800">
-                            غير مجدول
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      <div className="flex items-center space-x-4 rtl:space-x-reverse text-sm text-gray-600">
-                        <span>📞 {student.parentPhone}</span>
-                        <span>⏰ {student.time}</span>
-                        <Badge variant="outline">{student.level}</Badge>
-                        <Badge variant={getStatusColor(currentStatus)}>
-                          {getStatusText(currentStatus)}
-                        </Badge>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                      <Button
-                        size="sm"
-                        variant={currentStatus === 'present' ? 'default' : 'outline'}
-                        onClick={() => markAttendance(student.id, 'present')}
-                        className="bg-green-500 hover:bg-green-600 text-white"
-                      >
-                        <CheckSquare className="h-4 w-4 mr-1" />
-                        حاضر
-                      </Button>
-                      
-                      <Button
-                        size="sm"
-                        variant={currentStatus === 'absent' ? 'destructive' : 'outline'}
-                        onClick={() => markAttendance(student.id, 'absent')}
-                      >
-                        <X className="h-4 w-4 mr-1" />
-                        غائب
-                      </Button>
-
-                      {!student.isScheduled && (
-                        <Button
-                          size="sm"
-                          variant={currentStatus === 'visitor' ? 'secondary' : 'outline'}
-                          onClick={() => markAttendance(student.id, 'visitor')}
-                        >
-                          زائر
-                        </Button>
-                      )}
-                    </div>
+        <CardContent className="space-y-3 sm:space-y-4">
+          {students.map((student) => (
+            <div
+              key={student.id}
+              className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-gray-50 rounded-lg space-y-3 sm:space-y-0"
+            >
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <User className="h-8 w-8 text-gray-400 flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-gray-900 text-sm sm:text-base truncate">{student.name}</p>
+                  <div className="flex flex-wrap items-center gap-2 mt-1">
+                    <p className="text-xs sm:text-sm text-gray-500">{student.time}</p>
+                    <Badge variant="outline" className="text-xs">{student.level}</Badge>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              </div>
 
-          {filteredStudents.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              <Users className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <p>لا توجد نتائج للبحث</p>
+              <div className="flex items-center justify-between sm:justify-end space-x-3 rtl:space-x-reverse">
+                <div className="flex-shrink-0">
+                  {getStatusBadge(student.status)}
+                </div>
+                
+                <div className="flex space-x-2 rtl:space-x-reverse">
+                  <Button
+                    size="sm"
+                    className="bg-green-500 hover:bg-green-600 text-white text-xs sm:text-sm px-2 sm:px-3"
+                    onClick={() => markAttendance(student.id, 'present')}
+                    disabled={student.status === 'present'}
+                  >
+                    حاضر ✅
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    className="text-xs sm:text-sm px-2 sm:px-3"
+                    onClick={() => markAttendance(student.id, 'absent')}
+                    disabled={student.status === 'absent'}
+                  >
+                    غائب ❌
+                  </Button>
+                </div>
+              </div>
             </div>
-          )}
+          ))}
         </CardContent>
       </Card>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+        <Button 
+          className="w-full sm:flex-1 bg-blue-500 hover:bg-blue-600 text-sm sm:text-base py-2 sm:py-3"
+        >
+          💾 حفظ سجل الحضور
+        </Button>
+        <Button 
+          variant="outline" 
+          className="w-full sm:flex-1 text-sm sm:text-base py-2 sm:py-3"
+        >
+          📱 إرسال تقرير لأولياء الأمور
+        </Button>
+      </div>
     </div>
   );
 };
