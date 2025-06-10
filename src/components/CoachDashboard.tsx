@@ -4,7 +4,7 @@ import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Users, Plus, Calendar, CheckSquare } from 'lucide-react';
+import { Users, Plus, Calendar, CheckSquare, TrendingUp } from 'lucide-react';
 import StudentRegistrationForm from '@/components/StudentRegistrationForm';
 import AttendanceTracker from '@/components/AttendanceTracker';
 
@@ -26,94 +26,106 @@ const CoachDashboard: React.FC = () => {
         return <AttendanceTracker onBack={() => setActiveTab('overview')} />;
       default:
         return (
-          <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-6">
             {/* Quick Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0">
-                <CardContent className="p-3 sm:p-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow">
+                <CardContent className="p-4 sm:p-6">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-blue-100 text-xs sm:text-sm">إجمالي الطلاب</p>
-                      <p className="text-xl sm:text-3xl font-bold">{mockStats.totalStudents}</p>
+                    <div className="space-y-1">
+                      <p className="text-blue-100 text-xs sm:text-sm font-medium">إجمالي الطلاب</p>
+                      <p className="text-2xl sm:text-3xl font-bold">{mockStats.totalStudents}</p>
                     </div>
-                    <Users className="h-6 w-6 sm:h-8 sm:w-8 text-blue-200" />
+                    <div className="bg-blue-400/20 p-2 sm:p-3 rounded-xl">
+                      <Users className="h-5 w-5 sm:h-6 sm:w-6 text-blue-100" />
+                    </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white border-0">
-                <CardContent className="p-3 sm:p-6">
+              <Card className="bg-gradient-to-br from-green-500 to-emerald-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow">
+                <CardContent className="p-4 sm:p-6">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-green-100 text-xs sm:text-sm">حصص اليوم</p>
-                      <p className="text-xl sm:text-3xl font-bold">{mockStats.todaysSessions}</p>
+                    <div className="space-y-1">
+                      <p className="text-green-100 text-xs sm:text-sm font-medium">حصص اليوم</p>
+                      <p className="text-2xl sm:text-3xl font-bold">{mockStats.todaysSessions}</p>
                     </div>
-                    <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-green-200" />
+                    <div className="bg-green-400/20 p-2 sm:p-3 rounded-xl">
+                      <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-green-100" />
+                    </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white border-0">
-                <CardContent className="p-3 sm:p-6">
+              <Card className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow">
+                <CardContent className="p-4 sm:p-6">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-emerald-100 text-xs sm:text-sm">الحضور اليوم</p>
-                      <p className="text-xl sm:text-3xl font-bold">{mockStats.presentToday}</p>
+                    <div className="space-y-1">
+                      <p className="text-emerald-100 text-xs sm:text-sm font-medium">الحضور اليوم</p>
+                      <p className="text-2xl sm:text-3xl font-bold">{mockStats.presentToday}</p>
                     </div>
-                    <CheckSquare className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-200" />
+                    <div className="bg-emerald-400/20 p-2 sm:p-3 rounded-xl">
+                      <CheckSquare className="h-5 w-5 sm:h-6 sm:w-6 text-emerald-100" />
+                    </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-r from-orange-500 to-red-500 text-white border-0">
-                <CardContent className="p-3 sm:p-6">
+              <Card className="bg-gradient-to-br from-orange-500 to-red-500 text-white border-0 shadow-lg hover:shadow-xl transition-shadow">
+                <CardContent className="p-4 sm:p-6">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-orange-100 text-xs sm:text-sm">الغياب اليوم</p>
-                      <p className="text-xl sm:text-3xl font-bold">{mockStats.absentToday}</p>
+                    <div className="space-y-1">
+                      <p className="text-orange-100 text-xs sm:text-sm font-medium">الغياب اليوم</p>
+                      <p className="text-2xl sm:text-3xl font-bold">{mockStats.absentToday}</p>
                     </div>
-                    <CheckSquare className="h-6 w-6 sm:h-8 sm:w-8 text-orange-200" />
+                    <div className="bg-orange-400/20 p-2 sm:p-3 rounded-xl">
+                      <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-orange-100" />
+                    </div>
                   </div>
                 </CardContent>
               </Card>
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3 sm:pb-6">
-                  <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse text-base sm:text-lg">
-                    <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="hover:shadow-lg transition-all duration-200 border-0 shadow-md">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center space-x-3 rtl:space-x-reverse text-lg">
+                    <div className="bg-blue-100 p-2 rounded-lg">
+                      <Plus className="h-5 w-5 text-blue-600" />
+                    </div>
                     <span>تسجيل طالب جديد</span>
                   </CardTitle>
-                  <CardDescription className="text-sm">
+                  <CardDescription className="text-base leading-relaxed">
                     إضافة طالب جديد وتحديد جدول التدريبات الخاص به
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
                   <Button 
                     onClick={() => setActiveTab('register')}
-                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-sm sm:text-base py-2 sm:py-3"
+                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-base py-3 rounded-lg shadow-md hover:shadow-lg transition-all"
                   >
                     تسجيل طالب جديد
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3 sm:pb-6">
-                  <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse text-base sm:text-lg">
-                    <CheckSquare className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
+              <Card className="hover:shadow-lg transition-all duration-200 border-0 shadow-md">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center space-x-3 rtl:space-x-reverse text-lg">
+                    <div className="bg-green-100 p-2 rounded-lg">
+                      <CheckSquare className="h-5 w-5 text-green-600" />
+                    </div>
                     <span>تسجيل الحضور والغياب</span>
                   </CardTitle>
-                  <CardDescription className="text-sm">
+                  <CardDescription className="text-base leading-relaxed">
                     متابعة حضور الطلاب وتسجيل حالات الغياب
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
                   <Button 
                     onClick={() => setActiveTab('attendance')}
-                    className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-sm sm:text-base py-2 sm:py-3"
+                    className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-base py-3 rounded-lg shadow-md hover:shadow-lg transition-all"
                   >
                     تسجيل الحضور
                   </Button>
@@ -122,37 +134,45 @@ const CoachDashboard: React.FC = () => {
             </div>
 
             {/* Today's Schedule */}
-            <Card>
-              <CardHeader className="pb-3 sm:pb-6">
-                <CardTitle className="text-base sm:text-lg">جدول اليوم</CardTitle>
-                <CardDescription className="text-sm">الحصص المجدولة لليوم الحالي</CardDescription>
+            <Card className="border-0 shadow-md">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl flex items-center space-x-3 rtl:space-x-reverse">
+                  <div className="bg-purple-100 p-2 rounded-lg">
+                    <Calendar className="h-5 w-5 text-purple-600" />
+                  </div>
+                  <span>جدول اليوم</span>
+                </CardTitle>
+                <CardDescription className="text-base">الحصص المجدولة لليوم الحالي</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {[
                     { time: '08:00 - 09:00', student: 'أحمد محمد', level: 'متقدم', status: 'present' },
                     { time: '09:00 - 10:00', student: 'سارة علي', level: 'مبتدئ', status: 'present' },
                     { time: '10:00 - 11:00', student: 'محمد خالد', level: 'متوسط', status: 'absent' },
                     { time: '11:00 - 12:00', student: 'فاطمة أحمد', level: 'متقدم', status: 'pending' },
                   ].map((session, index) => (
-                    <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-gray-50 rounded-lg space-y-2 sm:space-y-0">
-                      <div className="flex items-center space-x-3 rtl:space-x-reverse min-w-0">
-                        <div className="text-sm min-w-0 flex-1">
-                          <p className="font-medium truncate">{session.student}</p>
-                          <p className="text-gray-500 text-xs sm:text-sm">{session.time}</p>
+                    <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-xl border hover:bg-gray-100 transition-colors space-y-3 sm:space-y-0">
+                      <div className="flex items-center space-x-4 rtl:space-x-reverse min-w-0 flex-1">
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <Users className="h-5 w-5 text-white" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-semibold text-gray-900 truncate text-base">{session.student}</p>
+                          <p className="text-gray-600 text-sm font-medium">{session.time}</p>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between sm:justify-end space-x-2 rtl:space-x-reverse">
-                        <Badge variant="outline" className="text-xs">{session.level}</Badge>
+                      <div className="flex items-center justify-between sm:justify-end space-x-3 rtl:space-x-reverse">
+                        <Badge variant="outline" className="text-sm px-3 py-1">{session.level}</Badge>
                         <Badge 
                           variant={
                             session.status === 'present' ? 'default' : 
                             session.status === 'absent' ? 'destructive' : 'secondary'
                           }
-                          className="text-xs"
+                          className="text-sm px-3 py-1"
                         >
-                          {session.status === 'present' ? 'حاضر' : 
-                           session.status === 'absent' ? 'غائب' : 'في الانتظار'}
+                          {session.status === 'present' ? 'حاضر ✅' : 
+                           session.status === 'absent' ? 'غائب ❌' : 'في الانتظار ⏳'}
                         </Badge>
                       </div>
                     </div>
