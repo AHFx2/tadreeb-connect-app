@@ -15,10 +15,12 @@ interface StudentRegistrationFormProps {
 
 const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBack }) => {
   const [formData, setFormData] = useState({
-    studentName: '',
+    studentFirstName: '',
+    studentLastName: '',
     studentAge: '',
     level: '',
-    parentName: '',
+    parentFirstName: '',
+    parentLastName: '',
     parentPhone: '',
     selectedDays: [] as number[],
     startTime: '',
@@ -47,8 +49,8 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBac
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.studentName || !formData.studentAge || !formData.level || 
-        !formData.parentName || !formData.parentPhone || 
+    if (!formData.studentFirstName || !formData.studentLastName || !formData.studentAge || !formData.level || 
+        !formData.parentFirstName || !formData.parentLastName || !formData.parentPhone || 
         formData.selectedDays.length === 0 || !formData.startTime || !formData.endTime) {
       toast({
         title: "خطأ",
@@ -59,19 +61,22 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBac
     }
 
     // Mock registration
-    console.log("Student registration data:", formData);
+    const fullStudentName = `${formData.studentFirstName} ${formData.studentLastName}`;
+    console.log("Student registration data:", { ...formData, fullStudentName });
     
     toast({
       title: "تم التسجيل بنجاح!",
-      description: `تم تسجيل الطالب ${formData.studentName} بنجاح`,
+      description: `تم تسجيل الطالب ${fullStudentName} بنجاح`,
     });
 
     // Reset form
     setFormData({
-      studentName: '',
+      studentFirstName: '',
+      studentLastName: '',
       studentAge: '',
       level: '',
-      parentName: '',
+      parentFirstName: '',
+      parentLastName: '',
       parentPhone: '',
       selectedDays: [],
       startTime: '',
@@ -80,90 +85,119 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBac
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="flex items-center space-x-4 rtl:space-x-reverse mb-6">
-        <Button variant="outline" onClick={onBack} className="flex items-center space-x-2 rtl:space-x-reverse">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 rtl:space-x-reverse mb-6">
+        <Button 
+          variant="outline" 
+          onClick={onBack} 
+          className="flex items-center justify-center sm:justify-start space-x-2 rtl:space-x-reverse w-full sm:w-auto"
+        >
           <ArrowRight className="h-4 w-4" />
           <span>العودة</span>
         </Button>
-        <h2 className="text-2xl font-bold">تسجيل طالب جديد</h2>
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center sm:text-right">تسجيل طالب جديد</h2>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2 rtl:space-x-reverse">
-            <User className="h-5 w-5 text-blue-500" />
+      <Card className="shadow-lg border-0 bg-white/95 backdrop-blur-sm">
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center justify-center sm:justify-end space-x-2 rtl:space-x-reverse text-lg sm:text-xl">
             <span>بيانات الطالب</span>
+            <User className="h-5 w-5 text-blue-500" />
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-center sm:text-right text-sm sm:text-base">
             أدخل بيانات الطالب وحدد جدول التدريبات
           </CardDescription>
         </CardHeader>
         
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <CardContent className="space-y-6 sm:space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
             {/* Student Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="studentName">اسم الطالب *</Label>
-                <Input
-                  id="studentName"
-                  value={formData.studentName}
-                  onChange={(e) => setFormData(prev => ({ ...prev, studentName: e.target.value }))}
-                  placeholder="أدخل اسم الطالب"
-                  className="text-right"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="studentAge">العمر *</Label>
-                <Input
-                  id="studentAge"
-                  type="number"
-                  value={formData.studentAge}
-                  onChange={(e) => setFormData(prev => ({ ...prev, studentAge: e.target.value }))}
-                  placeholder="العمر بالسنوات"
-                  min="5"
-                  max="80"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>المستوى *</Label>
-              <Select value={formData.level} onValueChange={(value) => setFormData(prev => ({ ...prev, level: value }))}>
-                <SelectTrigger className="text-right">
-                  <SelectValue placeholder="اختر المستوى" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="beginner">مبتدئ</SelectItem>
-                  <SelectItem value="intermediate">متوسط</SelectItem>
-                  <SelectItem value="advanced">متقدم</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Parent Information */}
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-semibold mb-4 flex items-center space-x-2 rtl:space-x-reverse">
-                <Phone className="h-5 w-5 text-green-500" />
-                <span>بيانات ولي الأمر</span>
-              </h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-4 sm:space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="parentName">اسم ولي الأمر *</Label>
+                  <Label htmlFor="studentFirstName" className="text-sm sm:text-base font-medium">الاسم الأول *</Label>
                   <Input
-                    id="parentName"
-                    value={formData.parentName}
-                    onChange={(e) => setFormData(prev => ({ ...prev, parentName: e.target.value }))}
-                    placeholder="أدخل اسم ولي الأمر"
-                    className="text-right"
+                    id="studentFirstName"
+                    value={formData.studentFirstName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, studentFirstName: e.target.value }))}
+                    placeholder="الاسم الأول للطالب"
+                    className="text-right h-10 sm:h-11 text-sm sm:text-base"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="parentPhone">رقم الجوال *</Label>
+                  <Label htmlFor="studentLastName" className="text-sm sm:text-base font-medium">الاسم الثاني *</Label>
+                  <Input
+                    id="studentLastName"
+                    value={formData.studentLastName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, studentLastName: e.target.value }))}
+                    placeholder="الاسم الثاني للطالب"
+                    className="text-right h-10 sm:h-11 text-sm sm:text-base"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="studentAge" className="text-sm sm:text-base font-medium">العمر *</Label>
+                  <Input
+                    id="studentAge"
+                    type="number"
+                    value={formData.studentAge}
+                    onChange={(e) => setFormData(prev => ({ ...prev, studentAge: e.target.value }))}
+                    placeholder="العمر بالسنوات"
+                    min="5"
+                    max="80"
+                    className="h-10 sm:h-11 text-sm sm:text-base"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm sm:text-base font-medium">المستوى *</Label>
+                <Select value={formData.level} onValueChange={(value) => setFormData(prev => ({ ...prev, level: value }))}>
+                  <SelectTrigger className="text-right h-10 sm:h-11 text-sm sm:text-base">
+                    <SelectValue placeholder="اختر المستوى" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="beginner">مبتدئ</SelectItem>
+                    <SelectItem value="intermediate">متوسط</SelectItem>
+                    <SelectItem value="advanced">متقدم</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Parent Information */}
+            <div className="border-t border-gray-200 pt-6 sm:pt-8">
+              <h3 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6 flex items-center justify-center sm:justify-end space-x-2 rtl:space-x-reverse">
+                <span>بيانات ولي الأمر</span>
+                <Phone className="h-5 w-5 text-green-500" />
+              </h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="parentFirstName" className="text-sm sm:text-base font-medium">الاسم الأول *</Label>
+                  <Input
+                    id="parentFirstName"
+                    value={formData.parentFirstName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, parentFirstName: e.target.value }))}
+                    placeholder="الاسم الأول لولي الأمر"
+                    className="text-right h-10 sm:h-11 text-sm sm:text-base"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="parentLastName" className="text-sm sm:text-base font-medium">الاسم الثاني *</Label>
+                  <Input
+                    id="parentLastName"
+                    value={formData.parentLastName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, parentLastName: e.target.value }))}
+                    placeholder="الاسم الثاني لولي الأمر"
+                    className="text-right h-10 sm:h-11 text-sm sm:text-base"
+                  />
+                </div>
+
+                <div className="space-y-2 sm:col-span-2 lg:col-span-1">
+                  <Label htmlFor="parentPhone" className="text-sm sm:text-base font-medium">رقم الجوال *</Label>
                   <Input
                     id="parentPhone"
                     type="tel"
@@ -171,30 +205,31 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBac
                     onChange={(e) => setFormData(prev => ({ ...prev, parentPhone: e.target.value }))}
                     placeholder="05xxxxxxxx"
                     dir="ltr"
+                    className="h-10 sm:h-11 text-sm sm:text-base"
                   />
                 </div>
               </div>
             </div>
 
             {/* Schedule */}
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-semibold mb-4 flex items-center space-x-2 rtl:space-x-reverse">
-                <Calendar className="h-5 w-5 text-orange-500" />
+            <div className="border-t border-gray-200 pt-6 sm:pt-8">
+              <h3 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6 flex items-center justify-center sm:justify-end space-x-2 rtl:space-x-reverse">
                 <span>جدول التدريبات</span>
+                <Calendar className="h-5 w-5 text-orange-500" />
               </h3>
               
-              <div className="space-y-4">
+              <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <Label className="mb-3 block">الأيام المخصصة للتدريب *</Label>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <Label className="mb-3 block text-sm sm:text-base font-medium">الأيام المخصصة للتدريب *</Label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3 sm:gap-4">
                     {days.map((day) => (
-                      <div key={day.id} className="flex items-center space-x-2 rtl:space-x-reverse">
+                      <div key={day.id} className="flex items-center space-x-2 rtl:space-x-reverse p-2 sm:p-3 rounded-lg border hover:bg-gray-50 transition-colors">
                         <Checkbox
                           id={`day-${day.id}`}
                           checked={formData.selectedDays.includes(day.id)}
                           onCheckedChange={() => handleDayToggle(day.id)}
                         />
-                        <Label htmlFor={`day-${day.id}`} className="cursor-pointer text-sm">
+                        <Label htmlFor={`day-${day.id}`} className="cursor-pointer text-xs sm:text-sm font-medium">
                           {day.name}
                         </Label>
                       </div>
@@ -202,24 +237,26 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBac
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="startTime">وقت البداية *</Label>
+                    <Label htmlFor="startTime" className="text-sm sm:text-base font-medium">وقت البداية *</Label>
                     <Input
                       id="startTime"
                       type="time"
                       value={formData.startTime}
                       onChange={(e) => setFormData(prev => ({ ...prev, startTime: e.target.value }))}
+                      className="h-10 sm:h-11 text-sm sm:text-base"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="endTime">وقت النهاية *</Label>
+                    <Label htmlFor="endTime" className="text-sm sm:text-base font-medium">وقت النهاية *</Label>
                     <Input
                       id="endTime"
                       type="time"
                       value={formData.endTime}
                       onChange={(e) => setFormData(prev => ({ ...prev, endTime: e.target.value }))}
+                      className="h-10 sm:h-11 text-sm sm:text-base"
                     />
                   </div>
                 </div>
@@ -228,7 +265,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBac
 
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white font-medium py-3"
+              className="w-full bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white font-medium h-12 sm:h-14 text-sm sm:text-base rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
             >
               تسجيل الطالب
             </Button>
