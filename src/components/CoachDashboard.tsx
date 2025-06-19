@@ -1,16 +1,16 @@
-
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Users, Plus, Calendar, CheckSquare, TrendingUp, Settings } from 'lucide-react';
+import { Users, Plus, Calendar, CheckSquare, TrendingUp, Settings, UserCheck } from 'lucide-react';
 import StudentRegistrationForm from '@/components/StudentRegistrationForm';
 import AttendanceTracker from '@/components/AttendanceTracker';
 import ScheduleManagement from '@/components/ScheduleManagement';
+import SessionStudentManagement from '@/components/SessionStudentManagement';
 
 const CoachDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'register' | 'attendance' | 'schedule'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'register' | 'attendance' | 'schedule' | 'session-students'>('overview');
 
   const mockStats = {
     totalStudents: 24,
@@ -27,6 +27,8 @@ const CoachDashboard: React.FC = () => {
         return <AttendanceTracker onBack={() => setActiveTab('overview')} />;
       case 'schedule':
         return <ScheduleManagement onBack={() => setActiveTab('overview')} />;
+      case 'session-students':
+        return <SessionStudentManagement onBack={() => setActiveTab('overview')} />;
       default:
         return (
           <div className="space-y-6">
@@ -90,7 +92,7 @@ const CoachDashboard: React.FC = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card className="hover:shadow-lg transition-all duration-200 border-0 shadow-md">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center space-x-3 rtl:space-x-reverse text-lg">
@@ -153,6 +155,28 @@ const CoachDashboard: React.FC = () => {
                     className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-base py-3 rounded-lg shadow-md hover:shadow-lg transition-all"
                   >
                     إدارة الحصص
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-all duration-200 border-0 shadow-md">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center space-x-3 rtl:space-x-reverse text-lg">
+                    <div className="bg-purple-100 p-2 rounded-lg">
+                      <UserCheck className="h-5 w-5 text-purple-600" />
+                    </div>
+                    <span>إدارة طلاب الحصص</span>
+                  </CardTitle>
+                  <CardDescription className="text-base leading-relaxed">
+                    إضافة وإزالة الطلاب من الحصص المجدولة
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <Button 
+                    onClick={() => setActiveTab('session-students')}
+                    className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-base py-3 rounded-lg shadow-md hover:shadow-lg transition-all"
+                  >
+                    إدارة طلاب الحصص
                   </Button>
                 </CardContent>
               </Card>
