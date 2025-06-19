@@ -6,7 +6,7 @@ import { ArrowRight, User } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import StudentInfoSection from './StudentInfoSection';
 import ParentInfoSection from './ParentInfoSection';
-import ScheduleSection from './ScheduleSection';
+import SessionSelection from './SessionSelection';
 
 interface StudentRegistrationFormProps {
   onBack: () => void;
@@ -21,9 +21,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBac
     parentFirstName: '',
     parentLastName: '',
     parentPhone: '',
-    selectedDays: [] as number[],
-    startTime: '',
-    endTime: ''
+    selectedSessions: [] as string[]
   });
 
   const updateFormData = (updates: Partial<typeof formData>) => {
@@ -35,10 +33,10 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBac
     
     if (!formData.studentFirstName || !formData.studentLastName || !formData.studentAge || !formData.level || 
         !formData.parentFirstName || !formData.parentLastName || !formData.parentPhone || 
-        formData.selectedDays.length === 0 || !formData.startTime || !formData.endTime) {
+        formData.selectedSessions.length === 0) {
       toast({
         title: "خطأ",
-        description: "يرجى ملء جميع الحقول المطلوبة",
+        description: "يرجى ملء جميع الحقول المطلوبة واختيار حصة واحدة على الأقل",
         variant: "destructive",
       });
       return;
@@ -50,7 +48,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBac
     
     toast({
       title: "تم التسجيل بنجاح!",
-      description: `تم تسجيل الطالب ${fullStudentName} بنجاح`,
+      description: `تم تسجيل الطالب ${fullStudentName} في ${formData.selectedSessions.length} حصة`,
     });
 
     // Reset form
@@ -62,9 +60,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBac
       parentFirstName: '',
       parentLastName: '',
       parentPhone: '',
-      selectedDays: [],
-      startTime: '',
-      endTime: ''
+      selectedSessions: []
     });
   };
 
@@ -89,7 +85,7 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBac
             <User className="h-5 w-5 text-blue-500" />
           </CardTitle>
           <CardDescription className="text-center sm:text-right text-sm sm:text-base">
-            أدخل بيانات الطالب وحدد جدول التدريبات
+            أدخل بيانات الطالب واختر الحصص المتاحة
           </CardDescription>
         </CardHeader>
         
@@ -114,14 +110,15 @@ const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = ({ onBac
               onFormDataChange={updateFormData}
             />
 
-            <ScheduleSection 
-              formData={{
-                selectedDays: formData.selectedDays,
-                startTime: formData.startTime,
-                endTime: formData.endTime
-              }}
-              onFormDataChange={updateFormData}
-            />
+            {formData.level && (
+              <SessionSelection 
+                formData={{
+                  selectedSessions: formData.selectedSessions
+                }}
+                onFormDataChange={updateFormData}
+                studentLevel={formData.level}
+              />
+            )}
 
             <Button 
               type="submit" 
