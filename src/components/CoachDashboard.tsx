@@ -4,12 +4,13 @@ import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Users, Plus, Calendar, CheckSquare, TrendingUp } from 'lucide-react';
+import { Users, Plus, Calendar, CheckSquare, TrendingUp, Settings } from 'lucide-react';
 import StudentRegistrationForm from '@/components/StudentRegistrationForm';
 import AttendanceTracker from '@/components/AttendanceTracker';
+import ScheduleManagement from '@/components/ScheduleManagement';
 
 const CoachDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'register' | 'attendance'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'register' | 'attendance' | 'schedule'>('overview');
 
   const mockStats = {
     totalStudents: 24,
@@ -24,6 +25,8 @@ const CoachDashboard: React.FC = () => {
         return <StudentRegistrationForm onBack={() => setActiveTab('overview')} />;
       case 'attendance':
         return <AttendanceTracker onBack={() => setActiveTab('overview')} />;
+      case 'schedule':
+        return <ScheduleManagement onBack={() => setActiveTab('overview')} />;
       default:
         return (
           <div className="space-y-6">
@@ -87,7 +90,7 @@ const CoachDashboard: React.FC = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card className="hover:shadow-lg transition-all duration-200 border-0 shadow-md">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center space-x-3 rtl:space-x-reverse text-lg">
@@ -128,6 +131,28 @@ const CoachDashboard: React.FC = () => {
                     className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-base py-3 rounded-lg shadow-md hover:shadow-lg transition-all"
                   >
                     تسجيل الحضور
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-all duration-200 border-0 shadow-md">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center space-x-3 rtl:space-x-reverse text-lg">
+                    <div className="bg-orange-100 p-2 rounded-lg">
+                      <Settings className="h-5 w-5 text-orange-600" />
+                    </div>
+                    <span>إدارة الحصص</span>
+                  </CardTitle>
+                  <CardDescription className="text-base leading-relaxed">
+                    إضافة وتعديل الحصص التدريبية في الجدول
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <Button 
+                    onClick={() => setActiveTab('schedule')}
+                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-base py-3 rounded-lg shadow-md hover:shadow-lg transition-all"
+                  >
+                    إدارة الحصص
                   </Button>
                 </CardContent>
               </Card>
